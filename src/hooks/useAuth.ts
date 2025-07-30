@@ -27,25 +27,28 @@ export const useAuth = create<AuthState>((set, get) => ({
     setLoading(true, 'Signing you in...');
 
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const tokenResponse = await axios.post('/api/auth/login', { email, password });
+      const userResponse = await axios.get(`/api/auth/${email}`);
 
-      const data = response.data;
+
+      const data = tokenResponse.data;
+      const userData = userResponse.data;
 
       localStorage.setItem('token', data.token);
 
-      const avatar = data.avatar && data.avatar.trim() !== ""
-      ? data.avatar
+      const avatar = userData.avatar && userData.avatar.trim() !== ""
+      ? userData.avatar
       : `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.email}`;
 
       const user: User = {
-        id: data.id,
-        email: data.email,
-        username: data.username,
-        name: data.name,
-        role: data.role,
+        id: userData.id,
+        email: userData.email,
+        username: userData.username,
+        name: userData.name,
+        role: userData.role,
         isOnline: true,
         lastSeen: new Date(),
-        timezone: data.timezone,
+        timezone: userData.timezone,
         avatar: avatar,
       };
 
