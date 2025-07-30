@@ -140,7 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed}) => {
                 {user.name}
               </p>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
-                {user.username}
+                {'@' + user.username}
               </p>
             </motion.div>
           )}

@@ -8,7 +8,7 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: (userId: string | undefined) => Promise<void>;
   register: (email: string, password: string, name: string, username: string) => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
   updatePassword: (currentPassword: string, newPassword: string) => Promise<void>;
@@ -80,14 +80,21 @@ export const useAuth = create<AuthState>((set, get) => ({
     }
   },
 
-  logout: () => {
+  logout: async (userId : string | undefined) => {
     const { setLoading } = useLoading.getState();
     setLoading(true, 'Signing you out...');
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    set({ user: null, isAuthenticated: false });
-    setLoading(false);
-    toast.success('logout Successfully.')
+    try {
+      await axios.put(`/api/auth/logout/${userId}`);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      set({ user: null, isAuthenticated: false });
+      setLoading(false);
+      toast.success('logout Successfully.');
+    }catch (error: any) {
+      console.error("logout Error: " , error.message);
+      setLoading(false);
+      toast.error('Logout Failed');
+    }
   },
 
   updateProfile: async (data: Partial<User>) => {

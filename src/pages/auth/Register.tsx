@@ -12,7 +12,7 @@ import { useAuth } from '../../hooks/useAuth';
 interface RegisterForm {
   name: string;
   email: string;
-  username: String;
+  username: string;
   password: string;
   confirmPassword: string;
   terms: boolean;
@@ -31,10 +31,10 @@ export const Register: React.FC = () => {
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
     try {
-      const formattedUsername = `@${data.username}`;
-      await registerUser(data.name, data.email, formattedUsername, data.password);
+      await registerUser(data.name, data.email, data.username, data.password);
       navigate('/login');
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Registration Error: ", error.message);
       toast.error('Failed to create account');
     } finally {
       setIsLoading(false);

@@ -71,8 +71,8 @@ export const Header: React.FC<HeaderProps> = ({
     setIsDark(!isDark);
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout(user?.id);
     navigate('/login');
   };
 
@@ -316,7 +316,7 @@ export const Header: React.FC<HeaderProps> = ({
                         {user?.name}
                       </p>
                       <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                        {user?.username}
+                        {'@' + user?.username}
                       </p>
                     </div>
                     <div className="py-1">

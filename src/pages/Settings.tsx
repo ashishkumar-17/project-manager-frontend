@@ -19,10 +19,12 @@ import { Input } from '../components/ui/Input';
 import { Avatar } from '../components/ui/Avatar';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
+import { useData } from '../hooks/useData.ts';
 
 
 export const Settings: React.FC = () => {
   const { user, updateProfile, updatePassword, updateAvatar } = useAuth();
+  const { users } = useData();
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'profile');
   const [showPassword, setShowPassword] = useState(false);
@@ -414,11 +416,7 @@ export const Settings: React.FC = () => {
               </Button>
             </div>
             <div className="space-y-4">
-              {[
-                { name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
-                { name: 'Jane Smith', email: 'jane@example.com', role: 'Manager', status: 'Active' },
-                { name: 'Bob Johnson', email: 'bob@example.com', role: 'Member', status: 'Pending' }
-              ].map((member) => (
+              {users.map((member) => (
                 <div key={member.email} className="flex items-center justify-between p-4 border border-neutral-200 dark:border-neutral-700 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <Avatar name={member.name} size="sm" />
@@ -436,11 +434,11 @@ export const Settings: React.FC = () => {
                       {member.role}
                     </span>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      member.status === 'Active' 
+                      member.isOnline
                         ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                         : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
                     }`}>
-                      {member.status}
+                      {member.isOnline ? 'online' : 'offline'}
                     </span>
                   </div>
                 </div>

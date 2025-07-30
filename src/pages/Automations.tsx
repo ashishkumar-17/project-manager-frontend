@@ -22,6 +22,7 @@ import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Modal } from '../components/ui/Modal';
 import { mockWorkflowRules } from '../data/mockData';
+import toast from "react-hot-toast";
 
 export const Automations: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -441,7 +442,10 @@ export const Automations: React.FC = () => {
             >
               Cancel
             </Button>
-            <Button onClick={() => setCreateModalOpen(false)}>
+            <Button onClick={() => {
+              setCreateModalOpen(false);
+              toast.loading("Coming Soon");
+            }}>
               Create Automation
             </Button>
           </div>
